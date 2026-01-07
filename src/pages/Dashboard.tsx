@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Music, Plus, LogOut, Heart, Disc3, User } from 'lucide-react';
+import { Plus, LogOut, Heart, Disc3, User, MoreVertical, Music } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,6 +10,7 @@ import { UploadModal } from '@/components/UploadModal';
 import { WeeklyStats } from '@/components/WeeklyStats';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SongWithStats } from '@/types';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function Dashboard() {
   const { profile, partner, signOut } = useAuth();
@@ -68,69 +69,84 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pb-32">
+    <div className="relative min-h-screen pb-32 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,hsl(var(--primary)/0.16),transparent_32%),radial-gradient(circle_at_80%_0%,hsl(var(--accent)/0.14),transparent_30%),linear-gradient(160deg,hsl(315_24%_8%),hsl(300_18%_10%))]" />
+      <div className="noise-layer" />
+
       {/* Header */}
-      <header className="sticky top-0 z-40 glass border-b border-border">
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/70">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <Music className="h-7 w-7 text-primary" />
-              <h1 className="text-2xl font-bold gradient-text">Our Songs</h1>
+              <div className="h-11 w-11 rounded-2xl overflow-hidden shadow-[0_10px_30px_hsl(var(--primary)/0.35)] border border-border/70 bg-muted/40">
+                <img
+                  src="/polaroid.png"
+                  alt="Our Spotify"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black gradient-text leading-tight">Our Spotify</h1>
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Our voices</p>
+              </div>
             </div>
             <span className="text-muted-foreground hidden sm:block">
               💕 {profile?.display_name} & {partner?.display_name || 'waiting...'}
             </span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Button 
-              onClick={() => setShowUpload(true)}
-              className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Upload Song</span>
-              <span className="sm:hidden">Add</span>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={signOut}>
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full border border-border/60">
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={signOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      <main className="relative max-w-7xl mx-auto px-4 py-8 space-y-8">
         {/* Weekly Stats Section */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Disc3 className="h-6 w-6 text-primary animate-spin-slow" />
-            This Week's Highlights
-          </h2>
-          <WeeklyStats onPlaySong={handlePlaySong} />
+        <section className="relative rounded-3xl border border-border/60 bg-gradient-to-br from-primary/10 via-background/40 to-secondary/10 p-6 shadow-[0_24px_80px_hsl(var(--primary)/0.12)] backdrop-blur">
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_25%_10%,hsl(var(--primary)/0.2),transparent_32%),radial-gradient(circle_at_80%_10%,hsl(var(--accent)/0.16),transparent_32%)] opacity-70" />
+          <div className="relative">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Disc3 className="h-6 w-6 text-primary animate-spin-slow" />
+              This Week's Highlights
+            </h2>
+            <WeeklyStats onPlaySong={handlePlaySong} />
+          </div>
         </section>
 
         {/* Songs Library */}
-        <section>
+        <section className="relative">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">Library</h2>
             <p className="text-muted-foreground">{songs.length} songs</p>
           </div>
 
           <Tabs value={tab} onValueChange={setTab} className="mb-6">
-            <TabsList>
-              <TabsTrigger value="all" className="gap-2">
+            <TabsList className="pill-tabs flex flex-wrap gap-2 w-fit">
+              <TabsTrigger value="all" className="gap-2 pill-tab">
                 <Music className="h-4 w-4" />
                 All
               </TabsTrigger>
-              <TabsTrigger value="favorites" className="gap-2">
+              <TabsTrigger value="favorites" className="gap-2 pill-tab">
                 <Heart className="h-4 w-4" />
                 Favorites
               </TabsTrigger>
-              <TabsTrigger value="mine" className="gap-2">
+              <TabsTrigger value="mine" className="gap-2 pill-tab">
                 <User className="h-4 w-4" />
                 Mine
               </TabsTrigger>
               {partner && (
-                <TabsTrigger value="theirs" className="gap-2">
+                <TabsTrigger value="theirs" className="gap-2 pill-tab">
                   <User className="h-4 w-4" />
                   {partner.display_name}'s
                 </TabsTrigger>

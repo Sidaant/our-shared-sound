@@ -26,8 +26,8 @@ export function SongCard({
 
   return (
     <Card className={cn(
-      "group relative overflow-hidden transition-all duration-300 hover:scale-[1.02]",
-      isPlaying && "ring-2 ring-primary animate-pulse-glow"
+      "group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_80px_hsl(var(--primary)/0.16)] bg-gradient-to-br from-[hsla(315,22%,12%,0.9)] via-[hsla(300,20%,10%,0.9)] to-[hsla(315,18%,8%,0.92)] border border-border/70 rounded-2xl",
+      isPlaying && "ring-2 ring-primary animate-pulse-glow shadow-[0_0_0_8px_hsl(var(--primary)/0.15)]"
     )}>
       {/* Cover Image */}
       <div className="aspect-square relative overflow-hidden">

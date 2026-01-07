@@ -4,74 +4,40 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 330 10% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 330 10% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 330 10% 10%;
-    --primary: 330 80% 60%;
+    /* Cinematic pink/ink palette */
+    --background: 320 24% 6%;
+    --foreground: 0 0% 98%;
+    --card: 315 22% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 320 22% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 330 92% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 330 30% 90%;
-    --secondary-foreground: 330 80% 40%;
-    --muted: 330 20% 95%;
-    --muted-foreground: 330 10% 40%;
-    --accent: 280 60% 70%;
-    --accent-foreground: 280 80% 20%;
-    --destructive: 0 84% 60%;
+    --secondary: 280 60% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 310 18% 16%;
+    --muted-foreground: 320 15% 72%;
+    --accent: 255 92% 70%;
+    --accent-foreground: 260 28% 18%;
+    --destructive: 0 72% 56%;
     --destructive-foreground: 0 0% 100%;
-    --border: 330 20% 85%;
-    --input: 330 20% 85%;
-    --ring: 330 80% 60%;
-    --radius: 0.75rem;
-    --chart-1: 330 80% 60%;
-    --chart-2: 280 60% 70%;
-    --chart-3: 24 80% 60%;
-    --chart-4: 200 70% 50%;
-    --chart-5: 160 60% 45%;
-    --sidebar-background: 330 20% 98%;
-    --sidebar-foreground: 330 10% 10%;
-    --sidebar-primary: 330 80% 60%;
+    --border: 315 16% 22%;
+    --input: 315 16% 22%;
+    --ring: 330 92% 60%;
+    --radius: 0.9rem;
+    --chart-1: 330 92% 55%;
+    --chart-2: 280 60% 50%;
+    --chart-3: 24 85% 56%;
+    --chart-4: 200 65% 50%;
+    --chart-5: 160 55% 45%;
+    --sidebar-background: 320 22% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 330 92% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 330 30% 92%;
-    --sidebar-accent-foreground: 330 80% 40%;
-    --sidebar-border: 330 20% 90%;
-    --sidebar-ring: 330 80% 60%;
-  }
-
-  .dark {
-    --background: 330 30% 8%;
-    --foreground: 330 10% 95%;
-    --card: 330 25% 12%;
-    --card-foreground: 330 10% 95%;
-    --popover: 330 25% 12%;
-    --popover-foreground: 330 10% 95%;
-    --primary: 330 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 330 30% 20%;
-    --secondary-foreground: 330 20% 90%;
-    --muted: 330 20% 18%;
-    --muted-foreground: 330 10% 60%;
-    --accent: 280 60% 60%;
-    --accent-foreground: 280 20% 95%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 330 20% 20%;
-    --input: 330 20% 20%;
-    --ring: 330 80% 60%;
-    --chart-1: 330 80% 60%;
-    --chart-2: 280 60% 60%;
-    --chart-3: 24 80% 55%;
-    --chart-4: 200 60% 50%;
-    --chart-5: 160 50% 45%;
-    --sidebar-background: 330 25% 10%;
-    --sidebar-foreground: 330 10% 95%;
-    --sidebar-primary: 330 80% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 330 30% 18%;
-    --sidebar-accent-foreground: 330 20% 90%;
-    --sidebar-border: 330 20% 18%;
-    --sidebar-ring: 330 80% 60%;
+    --sidebar-accent: 300 18% 16%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 315 16% 22%;
+    --sidebar-ring: 330 92% 60%;
   }
 }
 
@@ -79,9 +45,23 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  html::-webkit-scrollbar { display: none; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(1200px at 10% -10%, hsl(330 90% 20% / 0.55), transparent 55%),
+      radial-gradient(1200px at 90% 10%, hsl(255 92% 25% / 0.45), transparent 55%),
+      radial-gradient(1200px at 50% 100%, hsl(280 70% 20% / 0.45), transparent 55%),
+      linear-gradient(135deg, hsl(320 24% 7%), hsl(300 20% 9%));
+    position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  body::-webkit-scrollbar { display: none; }
 }
 
 @layer utilities {
@@ -91,6 +71,64 @@
   
   .gradient-text {
     @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  }
+
+  .noise-layer {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+  }
+
+  .cinematic-surface {
+    background: radial-gradient(circle at 20% 20%, hsl(var(--primary) / 0.12), transparent 30%),
+      radial-gradient(circle at 80% 0%, hsl(var(--accent) / 0.12), transparent 28%),
+      linear-gradient(145deg, hsl(315 22% 12% / 0.8), hsl(300 18% 8% / 0.85));
+    box-shadow:
+      0 20px 60px hsl(0 0% 0% / 0.45),
+      0 0 0 1px hsl(var(--border) / 0.8),
+      0 10px 30px hsl(var(--primary) / 0.12);
+  }
+
+  .neon-card {
+    @apply relative overflow-hidden rounded-[1.25rem] border border-border/60;
+    box-shadow:
+      0 10px 50px hsl(var(--primary) / 0.25),
+      0 0 0 1px hsl(var(--border) / 0.9);
+    background: linear-gradient(160deg, hsl(315 28% 12% / 0.9), hsl(310 24% 10% / 0.95));
+  }
+
+  .neon-card::before {
+    content: "";
+    position: absolute;
+    inset: -40% -40%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.14), transparent 35%),
+      radial-gradient(circle, hsl(var(--accent) / 0.12), transparent 28%);
+    filter: blur(60px);
+    z-index: 0;
+  }
+
+  .neon-card::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: linear-gradient(160deg, hsl(315 22% 12% / 0.7), hsl(300 18% 10% / 0.85));
+    z-index: 1;
+  }
+
+  .neon-card > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .pill-tabs {
+    @apply bg-muted/60 rounded-full p-1 border border-border/60 shadow-inner;
+  }
+
+  .pill-tab {
+    @apply rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-white transition-all;
   }
 }
 

@@ -98,112 +98,106 @@ export function AudioPlayer({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const CompactBar = () => (
+    <div className="flex items-center gap-3">
+      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-secondary flex-shrink-0">
+        {song?.cover_url ? (
+          <img src={song.cover_url} alt={song.title} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-primary-foreground text-xl">🎵</div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="font-semibold truncate leading-tight">{song?.title ?? 'Nothing playing'}</p>
+        <p className="text-xs text-muted-foreground truncate">
+          {song ? `by ${song.uploader?.display_name || 'Unknown'}` : 'Pick a track to start'}
+        </p>
+      </div>
+      {song && (
+        <Button variant="ghost" size="icon" onClick={() => onToggleFavorite(song.id)} className="flex-shrink-0">
+          <Heart
+            className={cn(
+              "h-5 w-5 transition-colors",
+              song.is_favorite && "fill-primary text-primary"
+            )}
+          />
+        </Button>
+      )}
+    </div>
+  );
+
   if (!song) {
     return (
-      <div className="fixed bottom-0 left-0 right-0 glass border-t border-border p-4">
-        <div className="max-w-4xl mx-auto text-center text-muted-foreground">
-          Select a song to play 💕
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-[hsl(315,18%,10%)] to-[hsl(300,16%,8%)] border-t border-border/60 px-4 py-3 shadow-[0_-10px_40px_hsl(var(--primary)/0.12)]">
+        <div className="max-w-5xl mx-auto">
+          <CompactBar />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 glass border-t border-border p-4 z-50">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[rgba(10,8,12,0.9)] backdrop-blur-xl border-t border-border/70 px-3 sm:px-4 py-3 shadow-[0_-12px_48px_hsl(var(--primary)/0.16)]">
       <audio ref={audioRef} />
-      
-      <div className="max-w-4xl mx-auto flex items-center gap-4">
-        {/* Song Info */}
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-14 h-14 rounded-lg overflow-hidden bg-gradient-to-br from-primary to-secondary flex-shrink-0">
-            {song.cover_url ? (
-              <img 
-                src={song.cover_url} 
-                alt={song.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-primary-foreground text-2xl">
-                🎵
-              </div>
-            )}
-          </div>
-          <div className="min-w-0">
-            <p className="font-semibold truncate">{song.title}</p>
-            <p className="text-sm text-muted-foreground truncate">
-              by {song.uploader?.display_name || 'Unknown'}
-            </p>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onToggleFavorite(song.id)}
-            className="flex-shrink-0"
-          >
-            <Heart 
-              className={cn(
-                "h-5 w-5 transition-colors",
-                song.is_favorite && "fill-primary text-primary"
-              )} 
-            />
-          </Button>
+
+      <div className="max-w-5xl mx-auto flex flex-col gap-2">
+        <CompactBar />
+
+        {/* Progress bar */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-muted-foreground w-10 text-right">
+            {formatTime(currentTime)}
+          </span>
+          <Slider
+            value={[currentTime]}
+            max={duration || 100}
+            step={1}
+            onValueChange={handleSeek}
+            className="flex-1"
+          />
+          <span className="text-[11px] text-muted-foreground w-10">
+            {formatTime(duration)}
+          </span>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col items-center gap-2 flex-1">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={onPrevious}>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="icon" onClick={onPrevious} className="h-9 w-9">
               <SkipBack className="h-5 w-5" />
             </Button>
             <Button 
               size="icon" 
               onClick={togglePlay}
-              className="h-12 w-12 rounded-full bg-primary hover:bg-primary/90"
+              className="h-10 w-10 rounded-full bg-primary hover:bg-primary/90 shadow-[0_8px_26px_hsl(var(--primary)/0.35)]"
             >
               {isPlaying ? (
-                <Pause className="h-6 w-6" />
+                <Pause className="h-5 w-5" />
               ) : (
-                <Play className="h-6 w-6 ml-0.5" />
+                <Play className="h-5 w-5 ml-0.5" />
               )}
             </Button>
-            <Button variant="ghost" size="icon" onClick={onNext}>
+            <Button variant="ghost" size="icon" onClick={onNext} className="h-9 w-9">
               <SkipForward className="h-5 w-5" />
             </Button>
           </div>
-          
-          <div className="flex items-center gap-2 w-full max-w-md">
-            <span className="text-xs text-muted-foreground w-10 text-right">
-              {formatTime(currentTime)}
-            </span>
-            <Slider
-              value={[currentTime]}
-              max={duration || 100}
-              step={1}
-              onValueChange={handleSeek}
-              className="flex-1"
-            />
-            <span className="text-xs text-muted-foreground w-10">
-              {formatTime(duration)}
-            </span>
-          </div>
-        </div>
 
-        {/* Volume */}
-        <div className="flex items-center gap-2 flex-1 justify-end">
-          <Button variant="ghost" size="icon" onClick={toggleMute}>
-            {isMuted ? (
-              <VolumeX className="h-5 w-5" />
-            ) : (
-              <Volume2 className="h-5 w-5" />
-            )}
-          </Button>
-          <Slider
-            value={[isMuted ? 0 : volume]}
-            max={1}
-            step={0.01}
-            onValueChange={handleVolumeChange}
-            className="w-24"
-          />
+          <div className="hidden sm:flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={toggleMute}>
+              {isMuted ? (
+                <VolumeX className="h-5 w-5" />
+              ) : (
+                <Volume2 className="h-5 w-5" />
+              )}
+            </Button>
+            <Slider
+              value={[isMuted ? 0 : volume]}
+              max={1}
+              step={0.01}
+              onValueChange={handleVolumeChange}
+              className="w-24"
+            />
+          </div>
         </div>
       </div>
     </div>

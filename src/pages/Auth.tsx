@@ -104,140 +104,160 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-muted to-background">
-      {/* Floating decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-primary/20 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-secondary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-accent/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-      </div>
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--primary)/0.16),transparent_32%),radial-gradient(circle_at_80%_0%,hsl(var(--accent)/0.16),transparent_28%),linear-gradient(145deg,hsl(315_24%_9%),hsl(300_18%_6%))]" />
+      <div className="noise-layer" />
 
-      <Card className="w-full max-w-md glass relative z-10">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Music className="h-8 w-8 text-primary" />
-            <Heart className="h-6 w-6 text-primary fill-primary animate-pulse" />
-          </div>
-          <CardTitle className="text-3xl gradient-text">Our Songs</CardTitle>
-          <CardDescription>A private music space, just for us 💕</CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <Tabs value={tab} onValueChange={(v) => setTab(v as 'login' | 'signup')}>
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">Log In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="bg-muted"
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-destructive">{errors.email}</p>
-                  )}
+      <div className="relative z-10 w-full max-w-md">
+        <Card className="neon-card shadow-2xl border-border/50">
+          <CardHeader className="text-center space-y-2">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <div className="h-12 w-12 rounded-2xl overflow-hidden shadow-[0_12px_40px_hsl(var(--primary)/0.4)] border border-border/70 bg-muted/40">
+                <img
+                  src="/polaroid.png"
+                  alt="Our Spotify"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <Heart className="h-8 w-8 text-primary fill-primary animate-pulse drop-shadow-[0_0_18px_hsl(var(--primary)/0.75)]" />
+            </div>
+            <CardTitle className="text-3xl font-black tracking-tight gradient-text">Our Spotify</CardTitle>
+          </CardHeader>
+          
+          <CardContent className="space-y-6">
+            <Tabs value={tab} onValueChange={(v) => setTab(v as 'login' | 'signup')}>
+              <TabsList className="pill-tabs grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="login" className="pill-tab text-sm font-semibold">
+                  Log In
+                </TabsTrigger>
+                <TabsTrigger value="signup" className="pill-tab text-sm font-semibold">
+                  Sign Up
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login" className="space-y-4">
+                <div className="rounded-2xl p-4 border border-border/60 bg-muted/40 backdrop-blur">
+                  <div className="text-xs uppercase tracking-[0.08em] text-muted-foreground/80">
+                    Returning duo
+                  </div>
+                  <div className="text-sm text-white font-medium">Welcome back to your private stage.</div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="bg-muted"
-                  />
-                  {errors.password && (
-                    <p className="text-sm text-destructive">{errors.password}</p>
-                  )}
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="login-email">Email</Label>
+                    <Input
+                      id="login-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary/70"
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-destructive">{errors.email}</p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="login-password">Password</Label>
+                    <Input
+                      id="login-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary/70"
+                    />
+                    {errors.password && (
+                      <p className="text-sm text-destructive">{errors.password}</p>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-secondary hover:brightness-110 shadow-[0_12px_30px_hsl(var(--primary)/0.35)]"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      'Log In'
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="signup" className="space-y-4">
+                <div className="rounded-2xl p-4 border border-border/60 bg-gradient-to-br from-primary/10 via-background/30 to-secondary/10 backdrop-blur">
+                  <div className="text-xs uppercase tracking-[0.08em] text-muted-foreground/80">
+                    New account
+                  </div>
+                  <div className="text-sm text-white font-medium">Craft your alias and drop the first track.</div>
                 </div>
-                
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    'Log In'
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Your Name</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="What should we call you?"
-                    className="bg-muted"
-                  />
-                  {errors.displayName && (
-                    <p className="text-sm text-destructive">{errors.displayName}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="bg-muted"
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-destructive">{errors.email}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="At least 6 characters"
-                    className="bg-muted"
-                  />
-                  {errors.password && (
-                    <p className="text-sm text-destructive">{errors.password}</p>
-                  )}
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    'Create Account'
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name">Your Name</Label>
+                    <Input
+                      id="signup-name"
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="What should we call you?"
+                      className="bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary/70"
+                    />
+                    {errors.displayName && (
+                      <p className="text-sm text-destructive">{errors.displayName}</p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary/70"
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-destructive">{errors.email}</p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Password</Label>
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="At least 6 characters"
+                      className="bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary/70"
+                    />
+                    {errors.password && (
+                      <p className="text-sm text-destructive">{errors.password}</p>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-secondary hover:brightness-110 shadow-[0_12px_30px_hsl(var(--primary)/0.35)]"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      'Create Account'
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
